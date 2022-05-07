@@ -24,3 +24,14 @@ func (b *BlockingQueue) Enqueue(val int) error {
 	b.data = append(b.data, val)
 	return nil
 }
+
+func (b *BlockingQueue) Dequeue() (int, error) {
+	b.cond.L.Lock()
+	defer b.cond.L.Unlock()
+	if len(b.data) == 0 {
+		return 0, errors.New("no data")
+	}
+	front := b.data[0]
+	b.data = b.data[1:]
+	return front, nil
+}
