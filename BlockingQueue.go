@@ -33,8 +33,8 @@ func (b *BlockingQueue) Enqueue(val int) {
 	}() {
 		return
 	}
-	b.cond.Wait()
 	b.cond.L.Lock()
+	b.cond.Wait()
 	defer b.cond.L.Unlock()
 	b.data = append(b.data, val)
 }
